@@ -300,12 +300,19 @@ class _CurrentVehicle():
 
         # Check for Brothers In Arms
         brothers_in_arms = True
+        fullBIACount = 0
         if len(self.__crew) == 0:
             brothers_in_arms = False
         else:
             for name, data in self.__crew.iteritems():
                 if "brotherhood" not in data["skill"]:
                     brothers_in_arms = False
+                elif data["skill"]["brotherhood"] == 100:
+                    fullBIACount += 1
+            if fullBIACount != len(self.__crew):
+                brothers_in_arms = False
+                if xvm_conf["tankrange"]["logging"]:
+                    LOG_NOTE("not 100% BIA")
 
         if xvm_conf["tankrange"]["logging"] and brothers_in_arms:
             LOG_NOTE("BIA Found")
